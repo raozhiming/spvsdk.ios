@@ -50,7 +50,7 @@ namespace Elastos {
 			 */
 			virtual nlohmann::json CreateTransfer(const std::string &targetAddress,
 												  const std::string &amount,
-												  EthereumAmountUnit amountUnit) const = 0;
+												  int amountUnit) const = 0;
 
 			/**
 			 *
@@ -69,9 +69,9 @@ namespace Elastos {
 			 */
 			virtual nlohmann::json CreateTransferGeneric(const std::string &targetAddress,
 														 const std::string &amount,
-														 EthereumAmountUnit amountUnit,
+														 int amountUnit,
 														 const std::string &gasPrice,
-														 EthereumAmountUnit gasPriceUnit,
+														 int gasPriceUnit,
 														 const std::string &gasLimit,
 														 const std::string &data) const = 0;
 
