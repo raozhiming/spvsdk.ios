@@ -259,6 +259,7 @@ namespace Elastos {
 			 *   },
 			 *   ...
 			 * ]
+			 * @param amount Retrieve amount including fee
 			 * @param fee Fee amount. Bigint string in SELA
 			 * @param memo Remarks string. Can be empty string.
 			 *
@@ -266,6 +267,7 @@ namespace Elastos {
 			 */
 			virtual nlohmann::json CreateRetrieveDepositTransaction(
                     const nlohmann::json &inputs,
+                    const std::string &amount,
                     const std::string &fee,
                     const std::string &memo) = 0;
 
@@ -282,10 +284,21 @@ namespace Elastos {
 			 */
 			virtual std::string GetOwnerAddress() const = 0;
 
+			/**
+			 * Get deposit address of owner.
+			 */
+			 virtual std::string GetOwnerDepositAddress() const = 0;
+
 		public:
 			//////////////////////////////////////////////////
 			/*                      CRC                     */
 			//////////////////////////////////////////////////
+
+			/**
+			 * Get CR deposit
+			 * @return
+			 */
+			virtual std::string GetCRDepositAddress() const = 0;
 
 			/**
 			 * Generate cr info payload digest for signature.
@@ -415,12 +428,14 @@ namespace Elastos {
 			 *   },
 			 *   ...
 			 * ]
+			 * @param amount Retrieve amount including fee
 			 * @param fee Fee amount. Bigint string in SELA
 			 * @param memo Remarks string. Can be empty string.
 			 * @return The transaction in JSON format to be signed and published.
 			 */
 			virtual nlohmann::json CreateRetrieveCRDepositTransaction(
 					const nlohmann::json &inputs,
+					const std::string &amount,
 					const std::string &fee,
 					const std::string &memo) = 0;
 
@@ -639,7 +654,7 @@ namespace Elastos {
 			 *   "MessageData": "", // Optional, string format, limit 800 Kbytes
 			 *   "Stage": 0, // value can be [0, 128)
 			 *   "OwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
-			 *   // If this proposal tracking is not use for changing owner, will be empty. Otherwise not empty.
+			 *   // If this proposal tracking is not use for changing owner, will be empty, eg: "NewOwnerPublicKey":"". Otherwise not empty.
 			 *   "NewOwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
 			 * }
 			 *
@@ -657,7 +672,7 @@ namespace Elastos {
 			 *   "MessageData": "", // Optional, string format, limit 800 Kbytes
 			 *   "Stage": 0, // value can be [0, 128)
 			 *   "OwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
-			 *   // If this proposal tracking is not use for changing owner, will be empty. Otherwise not empty.
+			 *   // If this proposal tracking is not use for changing owner, will be empty, eg: "NewOwnerPublicKey":"". Otherwise not empty.
 			 *   "NewOwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
 			 *   "OwnerSignature": "9a24a084a6f599db9906594800b6cb077fa7995732c575d4d125c935446c93bbe594ee59e361f4d5c2142856c89c5d70c8811048bfb2f8620fbc18a06cb58109",
 			 * }
@@ -676,10 +691,10 @@ namespace Elastos {
 			 *   "MessageData": "", // Optional, string format, limit 800 Kbytes
 			 *   "Stage": 0, // value can be [0, 128)
 			 *   "OwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
-			 *   // If this proposal tracking is not use for changing owner, will be empty. Otherwise not empty.
+			 *   // If this proposal tracking is not use for changing owner, will be empty, eg: "NewOwnerPublicKey":"". Otherwise not empty.
 			 *   "NewOwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
 			 *   "OwnerSignature": "9a24a084a6f599db9906594800b6cb077fa7995732c575d4d125c935446c93bbe594ee59e361f4d5c2142856c89c5d70c8811048bfb2f8620fbc18a06cb58109",
-			 *   // If NewOwnerPubKey is empty, this must be empty.
+			 *   // If NewOwnerPubKey is empty, this must be empty. eg: "NewOwnerSignature":""
 			 *   "NewOwnerSignature": "9a24a084a6f599db9906594800b6cb077fa7995732c575d4d125c935446c93bbe594ee59e361f4d5c2142856c89c5d70c8811048bfb2f8620fbc18a06cb58109",
 			 *   "Type": 0, // common = 0, progress = 1, rejected = 2, terminated = 3, changeOwner = 4, finalized = 5
 			 *   "SecretaryGeneralOpinionHash": "7c5d2e7cfd7d4011414b5ddb3ab43e2aca247e342d064d1091644606748d7513",
@@ -711,10 +726,10 @@ namespace Elastos {
 			 *   "MessageData": "", // Optional, string format, limit 800 Kbytes
 			 *   "Stage": 0, // value can be [0, 128)
 			 *   "OwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
-			 *   // If this proposal tracking is not use for changing owner, will be empty. Otherwise not empty.
+			 *   // If this proposal tracking is not use for changing owner, will be empty, eg: "NewOwnerPublicKey":"". Otherwise not empty.
 			 *   "NewOwnerPublicKey": "02c632e27b19260d80d58a857d2acd9eb603f698445cc07ba94d52296468706331",
 			 *   "OwnerSignature": "9a24a084a6f599db9906594800b6cb077fa7995732c575d4d125c935446c93bbe594ee59e361f4d5c2142856c89c5d70c8811048bfb2f8620fbc18a06cb58109",
-			 *   // If NewOwnerPubKey is empty, this must be empty.
+			 *   // If NewOwnerPubKey is empty, this must be empty. eg: "NewOwnerSignature":""
 			 *   "NewOwnerSignature": "9a24a084a6f599db9906594800b6cb077fa7995732c575d4d125c935446c93bbe594ee59e361f4d5c2142856c89c5d70c8811048bfb2f8620fbc18a06cb58109",
 			 *   "Type": 0, // common = 0, progress = 1, rejected = 2, terminated = 3, changeOwner = 4, finalized = 5
 			 *   "SecretaryGeneralOpinionHash": "7c5d2e7cfd7d4011414b5ddb3ab43e2aca247e342d064d1091644606748d7513",
