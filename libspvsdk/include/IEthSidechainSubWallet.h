@@ -54,6 +54,9 @@ namespace Elastos {
 			virtual nlohmann::json CreateTransfer(const std::string &targetAddress,
 												  const std::string &amount,
 												  int amountUnit,
+                                                  const std::string &gasPrice,
+                                                  int gasPriceUnit,
+                                                  const std::string &gasLimit,
 												  uint64_t nonce) const = 0;
 
 			/**
@@ -81,6 +84,8 @@ namespace Elastos {
 														 const std::string &gasLimit,
 														 const std::string &data,
 														 uint64_t nonce) const = 0;
+
+			virtual std::string ExportPrivateKey(const std::string &payPassword) const = 0;
 
         };
 
