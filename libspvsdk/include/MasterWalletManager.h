@@ -50,7 +50,8 @@ namespace Elastos {
 			 * 	"IDChain": { },
 			 * 	"ETHSC": { "ChainID": 20, "NetworkID": 20 },
 			 * 	"ETHDID": { "ChainID": 20, "NetworkID": 20 },
-			 * 	"ETHHECO": { "ChainID": 128, "NetworkID": 128 }
+			 * 	"ETHHECO": { "ChainID": 128, "NetworkID": 128 },
+			 * 	"BTC": {}
 			 * }
 			 */
 			explicit MasterWalletManager(const std::string &rootPath, const std::string &netType = "MainNet",
@@ -64,9 +65,14 @@ namespace Elastos {
 			virtual IMasterWallet *CreateMasterWallet(
 				const std::string &masterWalletID,
 				const std::string &mnemonic,
-				const std::string &phrasePassword,
-				const std::string &payPassword,
+				const std::string &passphrase,
+				const std::string &passwd,
 				bool singleAddress);
+
+            virtual IMasterWallet *CreateMasterWallet(
+                    const std::string &masterWalletID,
+                    const std::string &singlePrivateKey,
+                    const std::string &passwd);
 
 			virtual IMasterWallet *CreateMultiSignMasterWallet(
 				const std::string &masterWalletID,
@@ -123,10 +129,6 @@ namespace Elastos {
 				bool singleAddress,
 				time_t timestamp = 0);
 
-			virtual IMasterWallet *ImportReadonlyWallet(
-				const std::string &masterWalletID,
-				const nlohmann::json &walletJson);
-
 			virtual std::string GetVersion() const;
 
 			virtual void FlushData();
@@ -147,7 +149,6 @@ namespace Elastos {
 			Config *_config;
 			std::string _rootPath;
 			std::string _dataPath;
-			bool _p2pEnable;
 			mutable MasterWalletMap _masterWalletMap;
 		};
 	}

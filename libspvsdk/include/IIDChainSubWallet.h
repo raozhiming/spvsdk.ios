@@ -61,44 +61,45 @@ namespace Elastos {
 
 			/**
 			 * Get all DID derived of current subwallet.
-			 * @param start specify start index of all DID list.
+			 * @param index specify start index of all DID list.
 			 * @param count specify count of DID we need.
+			 * @param internal change address for true or normal external address for false.
 			 * @return If success return all DID in JSON format.
 			 *
 			 * example:
 			 * GetAllDID(0, 3) will return below
 			 * {
 			 *     "DID": ["iZDgaZZjRPGCE4x8id6YYJ158RxfTjTnCt", "iPbdmxUVBzfNrVdqJzZEySyWGYeuKAeKqv", "iT42VNGXNUeqJ5yP4iGrqja6qhSEdSQmeP"],
-			 *     "MaxCount": 100
 			 * }
 			 */
-			virtual nlohmann::json GetAllDID(uint32_t start, uint32_t count) const = 0;
+			virtual nlohmann::json GetDID(uint32_t index, uint32_t count, bool internal = false) const = 0;
 
-			virtual nlohmann::json GetAllCID(uint32_t start, uint32_t count) const = 0;
+            /**
+             * Get CID derived of current subwallet.
+             * @param index specify start index of all CID list.
+             * @param count specify count of CID we need.
+             * @param internal change address for true or normal external address for false.
+             * @return If success return CID in JSON format.
+             *
+             * example:
+             * GetAllDID(0, 3) will return below
+             * {
+             *     "CID": ["iZDgaZZjRPGCE4x8id6YYJ158RxfTjTnCt", "iPbdmxUVBzfNrVdqJzZEySyWGYeuKAeKqv", "iT42VNGXNUeqJ5yP4iGrqja6qhSEdSQmeP"],
+             * }
+             */
+			virtual nlohmann::json GetCID(uint32_t index, uint32_t count, bool internal = false) const = 0;
 
 			/**
 			 * Sign message with private key of did.
 			 * @param DIDOrCID will sign the message with public key of this did/cid.
 			 * @param message to be signed.
-			 * @param payPassword pay password.
+			 * @param passwd pay password.
 			 * @return If success, signature will be returned.
 			 */
 			virtual std::string Sign(
 				const std::string &DIDOrCID,
 				const std::string &message,
-				const std::string &payPassword) const = 0;
-
-			/**
-			 * Sign message with private key of did.
-			 * @param DIDOrCID will sign the message with public key of this did/cid.
-			 * @param digest hex string of sha256
-			 * @param payPassword pay password.
-			 * @return If success, signature will be returned.
-			 */
-			virtual std::string SignDigest(
-					const std::string &DIDOrCID,
-					const std::string &digest,
-					const std::string &payPassword) const = 0;
+				const std::string &passwd) const = 0;
 
 			/**
 			 * Verify signature with specify public key
